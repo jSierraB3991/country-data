@@ -20,7 +20,8 @@ func NewCountryService(database *gorm.DB) *CountryService {
 	repository := countryrepository.NewRepository(database)
 	repository.RunMigrations()
 	return &CountryService{
-		urlBase: "https://restcountries.com/v3.1/all",
+		repository: repository,
+		urlBase:    "https://restcountries.com/v3.1/all",
 	}
 }
 
