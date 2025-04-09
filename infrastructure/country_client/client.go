@@ -1,6 +1,7 @@
 package countryclient
 
 import (
+	"crypto/tls"
 	"encoding/json"
 	"io"
 	"log"
@@ -10,14 +11,26 @@ import (
 )
 
 func GetCountries(countryUrl string) ([]countryresponse.Country, error) {
+	tr := &http.Transport{
+		TLSClientConfig:   &tls.Config{InsecureSkipVerify: false},
+		ForceAttemptHTTP2: false, // <--- esta línea desactiva HTTP/2
+	}
+	client := &http.Client{Transport: tr}
 
-	resp, err := http.Get(countryUrl)
+	req, err := http.NewRequest("GET", countryUrl, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	// Establece un User-Agent como si fueras un navegador
+	req.Header.Set("User-Agent", "Mozilla/5.0 (compatible; MyGoClient/1.0)")
+
+	resp, err := client.Do(req)
 	if err != nil {
 		return nil, err
 	}
 	defer resp.Body.Close()
 
-	// Read the response body
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return nil, err
