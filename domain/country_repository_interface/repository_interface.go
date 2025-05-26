@@ -6,4 +6,5 @@ type CountryRepositoryInterface interface {
 	RunMigrations() error
 	SaveCountries(data []countrymodels.CountryIndicatives) error
 	HaveCountries() (bool, error)
+	FindCountryByCode(code string) (*countrymodels.CountryIndicatives, error)
 }
