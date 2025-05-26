@@ -18,14 +18,14 @@ func (repo *Repository) HaveCountries() (bool, error) {
 	return countriesCount > 0, nil
 }
 
-func (repo *Repository) FindCountryByCode(code string) (*countrymodels.CountryIndicatives, error) {
-	var country countrymodels.CountryIndicatives
-	err := repo.db.Where("country_code = ?", code).First(&country).Error
+func (repo *Repository) FindCountryByIndicative(indicativeParam string) (*countrymodels.CountryIndicatives, error) {
+	var indicative countrymodels.TelephoneIndicative
+	err := repo.db.Preload("CountryIndicatives").Where("indicativo = ?", indicativeParam).First(&indicative).Error
 	if err != nil {
 		if err == gorm.ErrRecordNotFound {
 			return nil, nil // Country not found
 		}
 		return nil, err // Other error
 	}
-	return &country, nil
+	return &indicative.CountryIndicatives, nil
 }
