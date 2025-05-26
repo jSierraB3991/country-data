@@ -29,3 +29,20 @@ func (repo *Repository) FindCountryByIndicative(indicativeParam string) (*countr
 	}
 	return &indicative.CountryIndicatives, nil
 }
+
+func (repo *Repository) FindAllCountries() ([]countrymodels.CountryIndicatives, error) {
+	var countries []countrymodels.CountryIndicatives
+	err := repo.db.Find(&countries).Error
+	if err != nil {
+		return nil, err
+	}
+	return countries, nil
+}
+func (repo *Repository) FindIndicativeByCountryId(countryId uint) ([]countrymodels.TelephoneIndicative, error) {
+	var indicatives []countrymodels.TelephoneIndicative
+	err := repo.db.Where("country_id = ?", countryId).Find(&indicatives).Error
+	if err != nil {
+		return nil, err
+	}
+	return indicatives, nil
+}
