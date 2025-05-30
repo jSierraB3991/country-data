@@ -37,12 +37,13 @@ func (repo *Repository) FindAllCountries(orderByEnglishName bool) ([]countrymode
 		columnOrder = "name_spa"
 	}
 	var countries []countrymodels.CountryIndicatives
-	err := repo.db.Order([]clause.OrderByColumn{
-		{
-			Column: clause.Column{Name: columnOrder},
-			Desc:   false,
-		},
-	}).Find(&countries).Error
+	err := repo.db.
+		Clauses(clause.OrderBy{
+			Columns: []clause.OrderByColumn{
+				{Column: clause.Column{Name: columnOrder}, Desc: false},
+			},
+		}).
+		Find(&countries).Error
 	if err != nil {
 		return nil, err
 	}
