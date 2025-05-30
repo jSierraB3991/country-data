@@ -3,6 +3,7 @@ package countryrepository
 import (
 	countrymodels "github.com/jSierraB3991/country-data/domain/country_models"
 	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 )
 
 func (repo *Repository) SaveCountries(data []countrymodels.CountryIndicatives) error {
@@ -30,9 +31,18 @@ func (repo *Repository) FindCountryByIndicative(indicativeParam string) (*countr
 	return &indicative.CountryIndicatives, nil
 }
 
-func (repo *Repository) FindAllCountries() ([]countrymodels.CountryIndicatives, error) {
+func (repo *Repository) FindAllCountries(orderByEnglishName bool) ([]countrymodels.CountryIndicatives, error) {
+	columnOrder := "name_eng"
+	if !orderByEnglishName {
+		columnOrder = "name_spa"
+	}
 	var countries []countrymodels.CountryIndicatives
-	err := repo.db.Find(&countries).Error
+	err := repo.db.Order([]clause.OrderByColumn{
+		{
+			Column: clause.Column{Name: columnOrder},
+			Desc:   false,
+		},
+	}).Find(&countries).Error
 	if err != nil {
 		return nil, err
 	}

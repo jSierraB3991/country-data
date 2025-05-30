@@ -7,7 +7,7 @@ type CountryRepositoryInterface interface {
 	SaveCountries(data []countrymodels.CountryIndicatives) error
 	HaveCountries() (bool, error)
 	FindCountryByIndicative(indicative string) (*countrymodels.CountryIndicatives, error)
-	FindAllCountries() ([]countrymodels.CountryIndicatives, error)
+	FindAllCountries(orderByEnglishName bool) ([]countrymodels.CountryIndicatives, error)
 	FindIndicativeByCountryId(countryId uint) ([]countrymodels.TelephoneIndicative, error)
 	FindIndicativeByCountryCode(countryCode string) ([]countrymodels.TelephoneIndicative, error)
 }

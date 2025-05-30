@@ -7,8 +7,5 @@ func (s *CountryService) FindCountryByIndicative(indicativeParam string) (*count
 	if err != nil {
 		return nil, err
 	}
-	if country == nil {
-		return nil, nil // or return an error if you prefer
-	}
 	return country, nil
 }
