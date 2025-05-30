@@ -17,3 +17,11 @@ func (s *CountryService) FindIndicativeByCountryId(countryId uint) ([]countrymod
 	}
 	return indicatives, nil
 }
+
+func (s *CountryService) FindIndicativeByCounttyCode(countryCode string) ([]countrymodels.TelephoneIndicative, error) {
+	indicatives, err := s.repository.FindIndicativeByCountryCode(countryCode)
+	if err != nil {
+		return nil, err
+	}
+	return indicatives, nil
+}

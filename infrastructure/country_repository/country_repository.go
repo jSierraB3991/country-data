@@ -38,9 +38,21 @@ func (repo *Repository) FindAllCountries() ([]countrymodels.CountryIndicatives, 
 	}
 	return countries, nil
 }
+
 func (repo *Repository) FindIndicativeByCountryId(countryId uint) ([]countrymodels.TelephoneIndicative, error) {
 	var indicatives []countrymodels.TelephoneIndicative
 	err := repo.db.Where("country_id = ?", countryId).Find(&indicatives).Error
+	if err != nil {
+		return nil, err
+	}
+	return indicatives, nil
+}
+
+func (repo *Repository) FindIndicativeByCountryCode(countryCode string) ([]countrymodels.TelephoneIndicative, error) {
+	countriesId := repo.db.Select("id").Where("country_code = ?", countryCode).Model(&countrymodels.CountryIndicatives{})
+
+	var indicatives []countrymodels.TelephoneIndicative
+	err := repo.db.Where("country_id IN (?)", countriesId).Find(&indicatives).Error
 	if err != nil {
 		return nil, err
 	}

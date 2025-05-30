@@ -9,4 +9,5 @@ type CountryRepositoryInterface interface {
 	FindCountryByIndicative(indicative string) (*countrymodels.CountryIndicatives, error)
 	FindAllCountries() ([]countrymodels.CountryIndicatives, error)
 	FindIndicativeByCountryId(countryId uint) ([]countrymodels.TelephoneIndicative, error)
+	FindIndicativeByCountryCode(countryCode string) ([]countrymodels.TelephoneIndicative, error)
 }
