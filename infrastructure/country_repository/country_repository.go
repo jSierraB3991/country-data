@@ -31,6 +31,15 @@ func (repo *Repository) FindCountryByIndicative(indicativeParam string) (*countr
 	return &indicative.CountryIndicatives, nil
 }
 
+func (repo *Repository) FindCountryById(idCountry uint) (*countrymodels.CountryIndicatives, error) {
+	var result countrymodels.CountryIndicatives
+	err := repo.db.Where("id = ?", idCountry).First(&result).Error
+	if err != nil {
+		return nil, err // Other error
+	}
+	return &result, nil
+}
+
 func (repo *Repository) FindAllCountries(orderByEnglishName bool) ([]countrymodels.CountryIndicatives, error) {
 	columnOrder := "name_eng"
 	if !orderByEnglishName {

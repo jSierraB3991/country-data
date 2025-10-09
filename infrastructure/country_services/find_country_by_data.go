@@ -9,3 +9,10 @@ func (s *CountryService) FindCountryByIndicative(indicativeParam string) (*count
 	}
 	return country, nil
 }
+func (s *CountryService) FindCountryById(countyId uint) (*countrymodels.CountryIndicatives, error) {
+	country, err := s.repository.FindCountryById(countyId)
+	if err != nil {
+		return nil, err
+	}
+	return country, nil
+}

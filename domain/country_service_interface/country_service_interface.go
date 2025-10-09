@@ -7,6 +7,7 @@ type CountryServiceInterface interface {
 	HaveCountries() bool
 
 	FindCountryByIndicative(indicativeParam string) (*countrymodels.CountryIndicatives, error)
+	FindCountryById(countyId uint) (*countrymodels.CountryIndicatives, error)
 	FindAllCountries(orderByEnglishName bool) ([]countrymodels.CountryIndicatives, error)
 
 	FindIndicativeByCountryId(countryId uint) ([]countrymodels.TelephoneIndicative, error)
