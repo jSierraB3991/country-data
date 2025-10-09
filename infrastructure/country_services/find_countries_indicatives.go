@@ -2,8 +2,8 @@ package countryservices
 
 import countrymodels "github.com/jSierraB3991/country-data/domain/country_models"
 
-func (s *CountryService) FindAllCountries(orderByEnglishName bool) ([]countrymodels.CountryIndicatives, error) {
-	countries, err := s.repository.FindAllCountries(orderByEnglishName)
+func (s *CountryService) FindAllCountries(orderByEnglishName bool, nameOfSearchCountry string) ([]countrymodels.CountryIndicatives, error) {
+	countries, err := s.repository.FindAllCountries(orderByEnglishName, nameOfSearchCountry)
 	if err != nil {
 		return nil, err
 	}

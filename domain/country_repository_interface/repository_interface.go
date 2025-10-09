@@ -8,7 +8,7 @@ type CountryRepositoryInterface interface {
 	HaveCountries() (bool, error)
 	FindCountryByIndicative(indicative string) (*countrymodels.CountryIndicatives, error)
 	FindCountryById(idCountry uint) (*countrymodels.CountryIndicatives, error)
-	FindAllCountries(orderByEnglishName bool) ([]countrymodels.CountryIndicatives, error)
+	FindAllCountries(orderByEnglishName bool, nameOfSearchCountry string) ([]countrymodels.CountryIndicatives, error)
 	FindIndicativeByCountryId(countryId uint) ([]countrymodels.TelephoneIndicative, error)
 	FindIndicativeByCountryCode(countryCode string) ([]countrymodels.TelephoneIndicative, error)
 }

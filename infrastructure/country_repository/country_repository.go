@@ -40,19 +40,23 @@ func (repo *Repository) FindCountryById(idCountry uint) (*countrymodels.CountryI
 	return &result, nil
 }
 
-func (repo *Repository) FindAllCountries(orderByEnglishName bool) ([]countrymodels.CountryIndicatives, error) {
+func (repo *Repository) FindAllCountries(orderByEnglishName bool, nameOfSearchCountry string) ([]countrymodels.CountryIndicatives, error) {
 	columnOrder := "name_eng"
 	if !orderByEnglishName {
 		columnOrder = "name_spa"
 	}
 	var countries []countrymodels.CountryIndicatives
-	err := repo.db.
-		Clauses(clause.OrderBy{
-			Columns: []clause.OrderByColumn{
-				{Column: clause.Column{Name: columnOrder}, Desc: false},
-			},
-		}).
-		Find(&countries).Error
+	model := repo.db.Clauses(clause.OrderBy{Columns: []clause.OrderByColumn{{Column: clause.Column{Name: columnOrder}, Desc: false}}})
+
+	if nameOfSearchCountry != "" {
+		nameOfSearch := "name_spa"
+		if orderByEnglishName {
+			nameOfSearch = "name_eng"
+		}
+		model.Where(nameOfSearch+" ?", nameOfSearchCountry)
+	}
+
+	err := model.Find(&countries).Error
 	if err != nil {
 		return nil, err
 	}
