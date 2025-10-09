@@ -19,3 +19,7 @@ func NewCountryService(database *gorm.DB) *CountryService {
 		urlBase:    "https://restcountries.com/v3.1/all",
 	}
 }
+
+func (s *CountryService) GetRepository() repositoryinterface.CountryRepositoryInterface {
+	return s.repository
+}
