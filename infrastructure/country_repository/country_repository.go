@@ -53,7 +53,7 @@ func (repo *Repository) FindAllCountries(orderByEnglishName bool, nameOfSearchCo
 		if orderByEnglishName {
 			nameOfSearch = "name_eng"
 		}
-		model.Where(nameOfSearch+" ?", nameOfSearchCountry)
+		model.Where(nameOfSearch+" = ?", nameOfSearchCountry)
 	}
 
 	err := model.Find(&countries).Error
