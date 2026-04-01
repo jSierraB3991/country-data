@@ -53,7 +53,7 @@ func (repo *Repository) FindAllCountries(orderByEnglishName bool, nameOfSearchCo
 		if orderByEnglishName {
 			nameOfSearch = "name_eng"
 		}
-		model.Where(nameOfSearch+" LIKE ?", "%"+nameOfSearchCountry+"%")
+		model = model.Where("LOWER("+nameOfSearch+") LIKE LOWER(?)", "%"+nameOfSearchCountry+"%")
 	}
 
 	err := model.Find(&countries).Error
