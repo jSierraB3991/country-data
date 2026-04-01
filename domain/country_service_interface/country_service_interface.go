@@ -12,4 +12,6 @@ type CountryServiceInterface interface {
 
 	FindIndicativeByCountryId(countryId uint) ([]countrymodels.TelephoneIndicative, error)
 	FindIndicativeByCounttyCode(countryCode string) ([]countrymodels.TelephoneIndicative, error)
+
+	ValidateCountryIndicatives(countryId uint, countryIndicative string) error
 }
