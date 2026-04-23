@@ -2,20 +2,26 @@ package countryrepository
 
 import (
 	countrymodels "github.com/jSierraB3991/country-data/domain/country_models"
+	eliotlibs "github.com/jSierraB3991/jsierra-libs"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
 )
 
 func (repo *Repository) SaveCountries(data []countrymodels.CountryIndicatives) error {
-	return repo.db.Model(&countrymodels.CountryIndicatives{}).Save(&data).Error
+	db := repo.GetConnection()
+	if db == nil {
+		return eliotlibs.NotDatabaseConfigurateError{}
+	}
+	return db.Model(&countrymodels.CountryIndicatives{}).Save(&data).Error
 }
 
 func (repo *Repository) HaveCountries() (bool, error) {
-	if repo.db == nil {
-		return true, nil
+	db := repo.GetConnection()
+	if db == nil {
+		return false, eliotlibs.NotDatabaseConfigurateError{}
 	}
 	var countriesCount int64
-	err := repo.db.Model(&countrymodels.CountryIndicatives{}).Count(&countriesCount).Error
+	err := db.Model(&countrymodels.CountryIndicatives{}).Count(&countriesCount).Error
 	if err != nil {
 		return false, err
 	}
@@ -23,8 +29,12 @@ func (repo *Repository) HaveCountries() (bool, error) {
 }
 
 func (repo *Repository) FindCountryByIndicative(indicativeParam string) (*countrymodels.CountryIndicatives, error) {
+	db := repo.GetConnection()
+	if db == nil {
+		return nil, eliotlibs.NotDatabaseConfigurateError{}
+	}
 	var indicative countrymodels.TelephoneIndicative
-	err := repo.db.Preload("CountryIndicatives").Where("indicativo = ?", indicativeParam).First(&indicative).Error
+	err := db.Preload("CountryIndicatives").Where("indicativo = ?", indicativeParam).First(&indicative).Error
 	if err != nil {
 		if err == gorm.ErrRecordNotFound {
 			return nil, nil // Country not found
@@ -35,8 +45,12 @@ func (repo *Repository) FindCountryByIndicative(indicativeParam string) (*countr
 }
 
 func (repo *Repository) FindCountryById(idCountry uint) (*countrymodels.CountryIndicatives, error) {
+	db := repo.GetConnection()
+	if db == nil {
+		return nil, eliotlibs.NotDatabaseConfigurateError{}
+	}
 	var result countrymodels.CountryIndicatives
-	err := repo.db.Where("id = ?", idCountry).First(&result).Error
+	err := db.Where("id = ?", idCountry).First(&result).Error
 	if err != nil {
 		return nil, err // Other error
 	}
@@ -44,12 +58,16 @@ func (repo *Repository) FindCountryById(idCountry uint) (*countrymodels.CountryI
 }
 
 func (repo *Repository) FindAllCountries(orderByEnglishName bool, nameOfSearchCountry string) ([]countrymodels.CountryIndicatives, error) {
+	db := repo.GetConnection()
+	if db == nil {
+		return nil, eliotlibs.NotDatabaseConfigurateError{}
+	}
 	columnOrder := "name_eng"
 	if !orderByEnglishName {
 		columnOrder = "name_spa"
 	}
 	var countries []countrymodels.CountryIndicatives
-	model := repo.db.Clauses(clause.OrderBy{Columns: []clause.OrderByColumn{{Column: clause.Column{Name: columnOrder}, Desc: false}}})
+	model := db.Clauses(clause.OrderBy{Columns: []clause.OrderByColumn{{Column: clause.Column{Name: columnOrder}, Desc: false}}})
 
 	if nameOfSearchCountry != "" {
 		nameOfSearch := "name_spa"
@@ -67,8 +85,12 @@ func (repo *Repository) FindAllCountries(orderByEnglishName bool, nameOfSearchCo
 }
 
 func (repo *Repository) FindIndicativeByCountryId(countryId uint) ([]countrymodels.TelephoneIndicative, error) {
+	db := repo.GetConnection()
+	if db == nil {
+		return nil, eliotlibs.NotDatabaseConfigurateError{}
+	}
 	var indicatives []countrymodels.TelephoneIndicative
-	err := repo.db.Where("country_id = ?", countryId).Find(&indicatives).Error
+	err := db.Where("country_id = ?", countryId).Find(&indicatives).Error
 	if err != nil {
 		return nil, err
 	}
@@ -76,10 +98,14 @@ func (repo *Repository) FindIndicativeByCountryId(countryId uint) ([]countrymode
 }
 
 func (repo *Repository) FindIndicativeByCountryCode(countryCode string) ([]countrymodels.TelephoneIndicative, error) {
-	countriesId := repo.db.Select("id").Where("country_code = ?", countryCode).Model(&countrymodels.CountryIndicatives{})
+	db := repo.GetConnection()
+	if db == nil {
+		return nil, eliotlibs.NotDatabaseConfigurateError{}
+	}
+	countriesId := db.Select("id").Where("country_code = ?", countryCode).Model(&countrymodels.CountryIndicatives{})
 
 	var indicatives []countrymodels.TelephoneIndicative
-	err := repo.db.Where("country_id IN (?)", countriesId).Find(&indicatives).Error
+	err := db.Where("country_id IN (?)", countriesId).Find(&indicatives).Error
 	if err != nil {
 		return nil, err
 	}

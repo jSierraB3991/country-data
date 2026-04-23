@@ -13,3 +13,7 @@ func NewRepository(db *gorm.DB) *Repository {
 		db: db,
 	}
 }
+
+func (repo *Repository) GetConnection() *gorm.DB {
+	return repo.db
+}
