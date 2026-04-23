@@ -18,7 +18,7 @@ func (repo *Repository) SaveCountries(data []countrymodels.CountryIndicatives) e
 func (repo *Repository) HaveCountries() (bool, error) {
 	db := repo.GetConnection()
 	if db == nil {
-		return false, eliotlibs.NotDatabaseConfigurateError{}
+		return true, nil
 	}
 	var countriesCount int64
 	err := db.Model(&countrymodels.CountryIndicatives{}).Count(&countriesCount).Error
