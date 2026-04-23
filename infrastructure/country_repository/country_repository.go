@@ -11,6 +11,9 @@ func (repo *Repository) SaveCountries(data []countrymodels.CountryIndicatives) e
 }
 
 func (repo *Repository) HaveCountries() (bool, error) {
+	if repo.db == nil {
+		return true, nil
+	}
 	var countriesCount int64
 	err := repo.db.Model(&countrymodels.CountryIndicatives{}).Count(&countriesCount).Error
 	if err != nil {
