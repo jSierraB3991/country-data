@@ -3,6 +3,7 @@ package countryservices
 import (
 	repositoryinterface "github.com/jSierraB3991/country-data/domain/country_repository_interface"
 	countryrepository "github.com/jSierraB3991/country-data/infrastructure/country_repository"
+	eliotlibs "github.com/jSierraB3991/jsierra-libs"
 	"gorm.io/gorm"
 )
 
@@ -13,7 +14,8 @@ type CountryService struct {
 
 func NewCountryService(database *gorm.DB) *CountryService {
 	repository := countryrepository.NewRepository(database)
-	repository.RunMigrations()
+	err := repository.RunMigrations()
+	eliotlibs.FinsihApp(err)
 	return &CountryService{
 		repository: repository,
 		urlBase:    "https://restcountries.com/v3.1/all?fields=name,flags,idd,translations,cca2",

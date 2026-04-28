@@ -1,6 +1,9 @@
 package repositoryinterface
 
-import countrymodels "github.com/jSierraB3991/country-data/domain/country_models"
+import (
+	countrymodels "github.com/jSierraB3991/country-data/domain/country_models"
+	"gorm.io/gorm"
+)
 
 type CountryRepositoryInterface interface {
 	RunMigrations() error
@@ -11,4 +14,6 @@ type CountryRepositoryInterface interface {
 	FindAllCountries(orderByEnglishName bool, nameOfSearchCountry string) ([]countrymodels.CountryIndicatives, error)
 	FindIndicativeByCountryId(countryId uint) ([]countrymodels.TelephoneIndicative, error)
 	FindIndicativeByCountryCode(countryCode string) ([]countrymodels.TelephoneIndicative, error)
+
+	UpdateConnection(db *gorm.DB)
 }

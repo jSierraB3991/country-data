@@ -3,7 +3,7 @@ module github.com/jSierraB3991/country-data
 go 1.25.0
 
 require (
-	github.com/jSierraB3991/jsierra-libs v0.9.3
+	github.com/jSierraB3991/jsierra-libs v0.9.6
 	gorm.io/gorm v1.31.1
 )
 

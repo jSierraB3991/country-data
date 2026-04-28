@@ -1,6 +1,9 @@
 package countryserviceinterface
 
-import countrymodels "github.com/jSierraB3991/country-data/domain/country_models"
+import (
+	countrymodels "github.com/jSierraB3991/country-data/domain/country_models"
+	"gorm.io/gorm"
+)
 
 type CountryServiceInterface interface {
 	SearchCountriesAndSave() error
@@ -14,4 +17,6 @@ type CountryServiceInterface interface {
 	FindIndicativeByCounttyCode(countryCode string) ([]countrymodels.TelephoneIndicative, error)
 
 	ValidateCountryIndicatives(countryId uint, countryIndicative string) error
+
+	RefreshDatabase(db *gorm.DB)
 }
