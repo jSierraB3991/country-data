@@ -5,7 +5,7 @@ import (
 	countryresponse "github.com/jSierraB3991/country-data/infrastructure/country_response"
 )
 
-func (s *CountryService) SaveCountries(data []countryresponse.Country) error {
+func (s *CountryService) SaveCountries(data []countryresponse.CountryDataResponse) error {
 	dataToSave := countrymappers.ToModels(data)
 	return s.repository.SaveCountries(dataToSave)
 }

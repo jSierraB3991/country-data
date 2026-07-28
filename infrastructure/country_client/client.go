@@ -10,7 +10,7 @@ import (
 	countryresponse "github.com/jSierraB3991/country-data/infrastructure/country_response"
 )
 
-func GetCountries(countryUrl string) ([]countryresponse.Country, error) {
+func GetCountries(countryUrl string) (*countryresponse.ApiResponse, error) {
 	tr := &http.Transport{
 		TLSClientConfig:   &tls.Config{InsecureSkipVerify: false},
 		ForceAttemptHTTP2: false, // <--- esta línea desactiva HTTP/2
@@ -36,11 +36,11 @@ func GetCountries(countryUrl string) ([]countryresponse.Country, error) {
 		return nil, err
 	}
 
-	var countries []countryresponse.Country
-	err = json.Unmarshal(body, &countries)
+	var apiResponse countryresponse.ApiResponse
+	err = json.Unmarshal(body, &apiResponse)
 	if err != nil {
 		log.Println("Error unmarshaling JSON:", err)
 		return nil, err
 	}
-	return countries, nil
+	return &apiResponse, nil
 }

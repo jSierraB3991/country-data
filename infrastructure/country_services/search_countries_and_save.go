@@ -1,12 +1,28 @@
 package countryservices
 
-import countryclient "github.com/jSierraB3991/country-data/infrastructure/country_client"
+import (
+	"fmt"
+
+	countryclient "github.com/jSierraB3991/country-data/infrastructure/country_client"
+	countryresponse "github.com/jSierraB3991/country-data/infrastructure/country_response"
+)
 
 func (s *CountryService) SearchCountriesAndSave() error {
-	data, err := countryclient.GetCountries(s.urlBase)
-	if err != nil {
-		return err
+
+	offset := 0
+	isMore := true
+	var dataResult []countryresponse.CountryDataResponse
+	for isMore {
+		urlFinal := fmt.Sprintf(s.urlBase, offset)
+		data, err := countryclient.GetCountries(urlFinal)
+
+		if err != nil {
+			return err
+		}
+		offset += 100
+		dataResult = append(dataResult, data.Data.Objects...)
+		isMore = data.Data.Meta.More
 	}
 
-	return s.SaveCountries(data)
+	return s.SaveCountries(dataResult)
 }
