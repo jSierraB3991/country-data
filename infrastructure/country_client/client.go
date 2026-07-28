@@ -10,7 +10,7 @@ import (
 	countryresponse "github.com/jSierraB3991/country-data/infrastructure/country_response"
 )
 
-func GetCountries(countryUrl string) (*countryresponse.ApiResponse, error) {
+func GetCountries(countryUrl, token string) (*countryresponse.ApiResponse, error) {
 	tr := &http.Transport{
 		TLSClientConfig:   &tls.Config{InsecureSkipVerify: false},
 		ForceAttemptHTTP2: false, // <--- esta línea desactiva HTTP/2
@@ -24,6 +24,7 @@ func GetCountries(countryUrl string) (*countryresponse.ApiResponse, error) {
 
 	// Establece un User-Agent como si fueras un navegador
 	req.Header.Set("User-Agent", "Mozilla/5.0 (compatible; MyGoClient/1.0)")
+	req.Header.Set("Authorization", "Bearer "+token)
 
 	resp, err := client.Do(req)
 	if err != nil {

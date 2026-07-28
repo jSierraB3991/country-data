@@ -14,7 +14,7 @@ func (s *CountryService) SearchCountriesAndSave() error {
 	var dataResult []countryresponse.CountryDataResponse
 	for isMore {
 		urlFinal := fmt.Sprintf(s.urlBase, offset)
-		data, err := countryclient.GetCountries(urlFinal)
+		data, err := countryclient.GetCountries(urlFinal, s.token)
 
 		if err != nil {
 			return err

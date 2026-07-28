@@ -9,16 +9,18 @@ import (
 
 type CountryService struct {
 	urlBase    string
+	token      string
 	repository repositoryinterface.CountryRepositoryInterface
 }
 
-func NewCountryService(database *gorm.DB, countryUrl string) *CountryService {
+func NewCountryService(database *gorm.DB, countryUrl, token string) *CountryService {
 	repository := countryrepository.NewRepository(database)
 	err := repository.RunMigrations()
 	eliotlibs.FinsihApp(err)
 	return &CountryService{
 		repository: repository,
 		urlBase:    countryUrl,
+		token:      token,
 	}
 }
 
