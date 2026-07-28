@@ -12,13 +12,13 @@ type CountryService struct {
 	repository repositoryinterface.CountryRepositoryInterface
 }
 
-func NewCountryService(database *gorm.DB) *CountryService {
+func NewCountryService(database *gorm.DB, countryUrl string) *CountryService {
 	repository := countryrepository.NewRepository(database)
 	err := repository.RunMigrations()
 	eliotlibs.FinsihApp(err)
 	return &CountryService{
 		repository: repository,
-		urlBase:    "https://restcountries.com/v3.1/all?fields=name,flags,idd,translations,cca2",
+		urlBase:    countryUrl,
 	}
 }
 
