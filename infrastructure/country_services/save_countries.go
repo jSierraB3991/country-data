@@ -1,6 +1,8 @@
 package countryservices
 
 import (
+	"context"
+
 	countrymappers "github.com/jSierraB3991/country-data/domain/country_mappers"
 	countryresponse "github.com/jSierraB3991/country-data/infrastructure/country_response"
 )
@@ -8,4 +10,9 @@ import (
 func (s *CountryService) SaveCountries(data []countryresponse.CountryDataResponse) error {
 	dataToSave := countrymappers.ToModels(data)
 	return s.repository.SaveCountries(dataToSave)
+}
+
+func (s *CountryService) SaveCountriesContext(ctx context.Context, data []countryresponse.CountryDataResponse) error {
+	dataToSave := countrymappers.ToModels(data)
+	return s.repository.SaveCountriesContext(ctx, dataToSave)
 }

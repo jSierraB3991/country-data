@@ -1,6 +1,8 @@
 package countryrepository
 
 import (
+	"context"
+
 	countrymodels "github.com/jSierraB3991/country-data/domain/country_models"
 	eliotlibs "github.com/jSierraB3991/jsierra-libs"
 	"gorm.io/gorm"
@@ -15,6 +17,17 @@ func (repo *Repository) SaveCountries(data []countrymodels.CountryIndicatives) e
 	return db.Model(&countrymodels.CountryIndicatives{}).Save(&data).Error
 }
 
+func (repo *Repository) SaveCountriesContext(ctx context.Context, data []countrymodels.CountryIndicatives) error {
+	db, err := repo.GetDb(ctx)
+	if err != nil {
+		return err
+	}
+	if db == nil {
+		return eliotlibs.NotDatabaseConfigurateError{}
+	}
+	return db.Model(&countrymodels.CountryIndicatives{}).Save(&data).Error
+}
+
 func (repo *Repository) HaveCountries() (bool, error) {
 	db := repo.GetConnection()
 	if db == nil {
@@ -22,6 +35,21 @@ func (repo *Repository) HaveCountries() (bool, error) {
 	}
 	var countriesCount int64
 	err := db.Model(&countrymodels.CountryIndicatives{}).Count(&countriesCount).Error
+	if err != nil {
+		return false, err
+	}
+	return countriesCount > 0, nil
+}
+func (repo *Repository) HaveCountriesContext(ctx context.Context) (bool, error) {
+	db, err := repo.GetDb(ctx)
+	if err != nil {
+		return false, err
+	}
+	if db == nil {
+		return true, nil
+	}
+	var countriesCount int64
+	err = db.Model(&countrymodels.CountryIndicatives{}).Count(&countriesCount).Error
 	if err != nil {
 		return false, err
 	}

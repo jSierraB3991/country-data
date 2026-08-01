@@ -1,6 +1,8 @@
 package repositoryinterface
 
 import (
+	"context"
+
 	countrymodels "github.com/jSierraB3991/country-data/domain/country_models"
 	"gorm.io/gorm"
 )
@@ -8,7 +10,9 @@ import (
 type CountryRepositoryInterface interface {
 	RunMigrations() error
 	SaveCountries(data []countrymodels.CountryIndicatives) error
+	SaveCountriesContext(ctx context.Context, data []countrymodels.CountryIndicatives) error
 	HaveCountries() (bool, error)
+	HaveCountriesContext(ctx context.Context) (bool, error)
 	FindCountryByIndicative(indicative string) (*countrymodels.CountryIndicatives, error)
 	FindCountryById(idCountry uint) (*countrymodels.CountryIndicatives, error)
 	FindAllCountries(orderByEnglishName bool, nameOfSearchCountry string) ([]countrymodels.CountryIndicatives, error)
