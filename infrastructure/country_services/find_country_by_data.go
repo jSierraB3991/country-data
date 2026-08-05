@@ -13,8 +13,8 @@ func (s *CountryService) FindCountryByIndicative(indicativeParam string) (*count
 	}
 	return country, nil
 }
-func (s *CountryService) FindCountryById(countyId uint) (*countrymodels.CountryIndicatives, error) {
-	country, err := s.repository.FindCountryById(countyId)
+func (s *CountryService) FindCountryById(countryId uint) (*countrymodels.CountryIndicatives, error) {
+	country, err := s.repository.FindCountryById(countryId)
 	if err != nil {
 		return nil, err
 	}
